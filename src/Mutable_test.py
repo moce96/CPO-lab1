@@ -1,6 +1,6 @@
 import unittest
 
-from hashMap_test.hashMap_mutable import HashMap
+from src.hashMap_mutable import HashMap
 
 
 class TestMutableList(unittest.TestCase):

@@ -1,4 +1,7 @@
-# 链式解决碰撞
+import hypothesis.strategies as st
+
+
+# Chain solution collision
 def add(n, element):
     remainer = element % n._mod
     if n._table[remainer][0] is None:
@@ -19,7 +22,7 @@ def remove(n, element):
         for i in range(len(n._table[remainer])):
             if n._table[remainer][i] == element:
                 n._table[remainer][i] = n._table[remainer][len(n._table[remainer]) - 1]
-                n._table[remainer].pop()  # 这里还没写完，add也有问题，相同元素的问题
+                n._table[remainer].pop()
                 break
             while i == len(n._table[remainer]) - 1:
                 return false
@@ -45,12 +48,12 @@ def to_list(n):
     return mylist
 
 
-def from_list(n,input_list):  # 需要返回set吗
+def from_list(n,input_list):
     fr_list = input_list
     for i in range(len(fr_list)):
         add(n,fr_list[i])
 
-def find_iseven(n):  # 这个方法测试时应该不用tollist了，因为直接输出了个list，下面一样
+def find_iseven(n):
     mylist = []
     mylist1 = []
     for i in range(n._mod):
@@ -118,6 +121,11 @@ def iterator(n):
         else:
             return next(a)
     return get_next
+
+
+
+
+
 
 
 class HashMap(object):

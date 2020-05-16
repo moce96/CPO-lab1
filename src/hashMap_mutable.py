@@ -1,4 +1,4 @@
-from hashMap_test.hashMap_immutable import from_list
+from src.hashMap_immutable import from_list
 
 
 class HashMap(object):
@@ -97,7 +97,7 @@ class HashMap(object):
                 if self._table[i][j] != None:
                     self._table[i][j] = f(self._table[i][j])
 
-    def reduce(self, f, initial_state):  # 这个没看懂
+    def reduce(self, f, initial_state):
         state = initial_state
         for i in range(self._mod):
             for j in range(len(self._table[i])):
@@ -109,7 +109,7 @@ class HashMap(object):
     def mempty(self):
         return None
 
-    def mconcat(self,a, b):  # a,b是list类型
+    def mconcat(self,a, b):  # a,b is the type of list
         from_list(a)
         from_list(b)
 
