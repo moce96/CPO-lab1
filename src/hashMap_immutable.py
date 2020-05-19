@@ -13,6 +13,21 @@ def add(n, element):
         n._table[remainer][index] = element
 
 
+def add_from_list(n,element__list):
+    for element in element__list:
+        remainer=element % n._mod
+        if n._table[remainer][0] is None:
+            n._table[remainer][0]=element
+        else:
+            flag=0
+            for i in n.table[remainer]:
+                if element == i:
+                    flag = 1
+            if flag == 0:
+                n.table[remainer].append(element)
+
+
+
 def remove(n, element):
     assert n is not None, "element should be in hashMap"
     remainer = element % n._mod
@@ -123,6 +138,16 @@ def iterator(n):
     return get_next
 
 
+def mempty(n):
+    return None
+
+
+def mconcat(a,b):
+    assert type(a) is HashMap
+    assert type(b) is HashMap
+    list_b = b.to_list()
+    a.add_from_list(list_b)
+    return a
 
 
 

@@ -5,7 +5,7 @@ from hypothesis import given
 import hypothesis.strategies as st
 
 from src.hashMap_immutable import HashMap, add, to_list, remove, size, from_list, find_iseven, filter_iseven, reduce, \
-    concat, iterator
+    concat, iterator, add_from_list, mconcat
 
 
 class TestImmutableList(unittest.TestCase):
@@ -17,6 +17,12 @@ class TestImmutableList(unittest.TestCase):
         self.assertEqual(to_list(hash),[1])
         add(hash,2)
         self.assertEqual(to_list(hash), [1,2])
+
+
+    def test_add_from_list(self):
+        hash=HashMap()
+        add_from_list(hash,[1,2,3])
+        self.assertEqual(to_list(hash), [1, 2,3])
 
 
     def test_remove(self):
@@ -91,17 +97,19 @@ class TestImmutableList(unittest.TestCase):
 
     def test_mconcat(self):
         hash1 = HashMap()
-        add(hash1, 1)
-        add(hash1, 2)
         hash2 = HashMap()
-        add(hash2, 3)
-        add(hash2, 4)
         hash3 = HashMap()
-        add(hash3, 1)
-        add(hash3, 2)
-        add(hash3, 3)
-        add(hash3, 4)
-        self.assertEqual(to_list(concat(hash1, hash2)),to_list(hash3))
+        hash4=HashMap()
+        add_from_list(hash1,[1,2])
+        add_from_list(hash2, [3,4])
+        add_from_list(hash3, [1,2,3, 4])
+        add_from_list(hash4,[5,6,7])
+        self.assertEqual(to_list(mconcat(hash1, hash2)),to_list(hash3))
+        self.assertEqual(to_list(mconcat(mconcat(hash1,hash2),hash4)),
+                         to_list(mconcat(hash1,mconcat(hash2,hash4))))
+
+
+
 
     @given(st.lists(st.integers()))
     def test_from_list_to_list_equality(self,a):
@@ -136,7 +144,6 @@ class TestImmutableList(unittest.TestCase):
 
         get_next = iterator(None)
         self.assertEqual(get_next(), False)
-
 
 
 if __name__ == '__main__':
