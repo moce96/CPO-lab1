@@ -1,6 +1,6 @@
 import unittest
 
-from src.hashMap_mutable import HashMap
+from src.hashMap_mutable import *
 
 
 class TestMutableList(unittest.TestCase):
@@ -122,6 +122,18 @@ class TestMutableList(unittest.TestCase):
              hash.from_list(e)
              self.assertEqual(hash.reduce(lambda st, _: st + 1, 0), hash.size())
 
+    def test_mconcat(self):
+        hash_a = HashMap()
+        hash_b = HashMap()
+        hash_c = HashMap()
+        hash_d = HashMap()
+        hash_a.add_from_list([1, 2, 3])
+        hash_b.add_from_list([5, 6, 7])
+        hash_c.add_from_list([1, 2, 3, 5, 6, 7])
+        hash_d.add_from_list([8, 9, 10])
+        self.assertEqual(HashMap.mconcat(hash_a, hash_b).to_list(), hash_c.to_list())
+        #(a·b)·c = a·(b·c)
+        self.assertEqual(HashMap.mconcat(hash_a, HashMap.mconcat(hash_b,hash_d)).to_list(), HashMap.mconcat(HashMap.mconcat(hash_a,hash_b),hash_d).to_list())
 
 if __name__ == '__main__':
     unittest.main()
