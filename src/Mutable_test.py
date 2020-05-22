@@ -1,5 +1,6 @@
 import unittest
-
+from hypothesis import given
+import hypothesis.strategies as st
 from src.hashMap_mutable import *
 
 
@@ -122,6 +123,17 @@ class TestMutableList(unittest.TestCase):
              hash.from_list(e)
              self.assertEqual(hash.reduce(lambda st, _: st + 1, 0), hash.size())
 
+    def test_hash(self):
+        hash = HashMap()
+        hash.add(14)
+        hash.add(1)
+        #mod is 13
+        a = hash.get_hash(14)
+        b = hash.get_hash(1)
+        self.assertEqual(a[0],b[0])
+        #Two numbers have the same key value
+
+
     def test_mconcat(self):
         hash_a = HashMap()
         hash_b = HashMap()
@@ -134,6 +146,48 @@ class TestMutableList(unittest.TestCase):
         self.assertEqual(HashMap.mconcat(hash_a, hash_b).to_list(), hash_c.to_list())
         #(a·b)·c = a·(b·c)
         self.assertEqual(HashMap.mconcat(hash_a, HashMap.mconcat(hash_b,hash_d)).to_list(), HashMap.mconcat(HashMap.mconcat(hash_a,hash_b),hash_d).to_list())
+
+    @given(st.lists(st.integers()))
+    def test_from_list_to_list_equality(self, a):
+        hash = HashMap()
+        hash.from_list(a)
+        b = hash.to_list()
+        self.assertEqual(a,b)
+
+    @given(st.lists(st.integers()))
+    def test_python_len_and_list_size_equality(self, a):
+        hash = HashMap()
+
+        hash.from_list(a)
+        self.assertEqual(hash.size(), len(a))
+
+    @given(st.lists(st.integers()))
+    def test_associative_property(self,a):
+        hash_a = HashMap()
+        hash_b = HashMap()
+        hash_c = HashMap()
+        hash_a.from_list([1, 2, 3])
+        hash_b.from_list([5, 6, 7])
+        hash_c.from_list(a)
+        self.assertEqual(HashMap.mconcat(hash_a, HashMap.mconcat(hash_b, hash_c)).to_list(),HashMap.mconcat(HashMap.mconcat(hash_a, hash_b), hash_c).to_list())
+
+    @given(a=st.lists(st.integers()),b=st.lists(st.integers()))
+    def test_identity_element_property(self, a, b):
+        hash_a = HashMap()
+        hash_b = HashMap()
+        hash_a.from_list(a)
+        hash_b.from_list(b)
+        a_b = HashMap.mconcat(hash_a,hash_b)  # {}
+        b_a = HashMap.mconcat(hash_a,hash_b)  # {}
+        self.assertEqual(a_b, b_a)
+
+    def test_hash_collision(self):
+        hash = HashMap()
+        hash.add(14)
+        hash.add(27)
+        self.assertEqual(hash.get_hash(27)[0], hash.get_hash(14)[0])
+        self.assertNotEqual(hash.get_hash(27)[1], hash.get_hash(14)[1])
+        #The two numbers have the same key value, but the serial number in the same bucket is different. The chain solves the collision
 
 if __name__ == '__main__':
     unittest.main()
