@@ -61,6 +61,7 @@ class HashMap(object):
     #         if self.table[remainder][i]==element:
     #             self.table[remainder][i]=None
     #     return 0
+    #
 
 
 
