@@ -5,7 +5,7 @@ class HashMap(object):
         self.table = [[None for i in range(1)] for i in range(13)]
         self.mod = 13
         self.list_backup = []
-
+        self.count = 0
 
 
     def add(self, element):
@@ -53,7 +53,7 @@ class HashMap(object):
                     break
                 while i == len(self.table[remainer]) - 1:
                     return 0
-
+        self.count = self.count+1
 
     # def remove(self,element):
     #     remainder=element % self.mod
@@ -65,7 +65,7 @@ class HashMap(object):
 
 
     def size(self):
-        return len(self.list_backup)
+        return len(self.list_backup)-self.count
 
 
     # def to_list(self):
@@ -113,10 +113,15 @@ class HashMap(object):
         return mylist1
 
     def map(self, f):
+        map_list =[]
         for i in range(self.mod):
             for j in range(len(self.table[i])):
                 if self.table[i][j] != None:
                     self.table[i][j] = f(self.table[i][j])
+                    map_list.append(self.table[i][j])
+        return map_list
+
+
 
     def reduce(self, f, initial_state):
         state = initial_state
