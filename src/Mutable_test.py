@@ -98,8 +98,9 @@ class TestMutableList(unittest.TestCase):
         self.assertEqual(hash.to_list(), [])
         hash=HashMap()
         hash.from_list([1,2,3])
-        hash.map(str)
-        self.assertEqual(hash.to_list(), ["1", "2", "3"])
+        # hash.map(str)
+        self.assertEqual( hash.map(str), ["1", "2", "3"])
+
 
 
 
