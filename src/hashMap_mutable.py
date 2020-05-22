@@ -4,13 +4,16 @@ class HashMap(object):
     def __init__(self):
         self.table = [[None for i in range(1)] for i in range(13)]
         self.mod = 13
+        self.list_backup = []
 
 
 
     def add(self, element):
+        self.list_backup.append(element)
         remainer = element % self.mod
         if self.table[remainer][0] is None:
             self.table[remainer][0] = element
+
         else:
             flag = 0
             for i in self.table[remainer]:
@@ -27,6 +30,7 @@ class HashMap(object):
             remainer = element % self.mod
             if self.table[remainer][0] is None:
                 self.table[remainer][0] = element
+
             else:
                 flag = 0
                 for i in self.table[remainer]:
@@ -34,6 +38,7 @@ class HashMap(object):
                         flag = 1
                 if flag == 0:
                     self.table[remainer].append(element)
+
 
 
     def remove(self, element):
@@ -60,26 +65,24 @@ class HashMap(object):
 
 
     def size(self):
-        sum = 0
-        for i in range(self.mod):
-            for j in range(len(self.table[i])):
-                if self.table[i][j] != None:
-                    sum += 1
+        return len(self.list_backup)
 
-        return sum
 
+    # def to_list(self):
+    #     mylist = []
+    #     for i in range(self.mod):
+    #         for j in range(len(self.table[i])):
+    #             if self.table[i][j] != None:
+    #                 mylist.append(self.table[i][j])
+    #     return mylist
 
     def to_list(self):
-        mylist = []
-        for i in range(self.mod):
-            for j in range(len(self.table[i])):
-                if self.table[i][j] != None:
-                    mylist.append(self.table[i][j])
-        return mylist
+        return self.list_backup
 
 
     def from_list(self, input_list):
         fr_list = input_list
+
         for i in range(len(fr_list)):
             self.add(fr_list[i])
 
@@ -134,6 +137,14 @@ class HashMap(object):
         a.add_from_list(list_b)
         return a
 
+    def get_hash(self,element):
+        for i in range(len(self.table)):
+            for j in range(len(self.table[i])):
+                if self.table[i][j] == element:
+                    return i,j
+        return None
+
+
 
     def __iter__(self):
         return self
@@ -147,3 +158,4 @@ class HashMap(object):
         tmp = self.to_list[start]
         start += 1
         return tmp
+
