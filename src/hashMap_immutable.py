@@ -7,12 +7,13 @@ def add(n, element):
     remainer = element % n.mod
     if n.table[remainer][0] is None:
         n.table[remainer][0] = element
-
     else:
         flag = 0
         for i in n.table[remainer]:
-            if element == i:
-                flag = 1
+            if n.table[remainer][i]==element:
+                flag=1
+            # if element == i:
+            #     flag = 1
         if flag == 0:
             n.table[remainer].append(element)
 
@@ -22,7 +23,6 @@ def add_from_list(n, element_list):
         remainer = element % n.mod
         if n.table[remainer][0] is None:
             n.table[remainer][0] = element
-
         else:
             flag = 0
             for i in n.table[remainer]:
@@ -147,6 +147,6 @@ class HashMap(object):
     def __init__(self,values=None):
         self.table = [[None for i in range(1)] for i in range(13)]
         self.mod = 13
-        self.list_backup = []
-        self.count = 0
+        # self.list_backup = []
+        # self.count = 0
 

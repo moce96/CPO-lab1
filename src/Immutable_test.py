@@ -148,15 +148,15 @@ class TestImmutableList(unittest.TestCase):
             self.assertEqual(to_list(mconcat(hash_a, mconcat(hash_b, hash_c))),
                              to_list(mconcat(mconcat(hash_a, hash_b), hash_c)))
 
-    @given(a=st.lists(st.integers()), b=st.lists(st.integers()))
-    def test_identity_element_property(self, a, b):
-                hash_a = HashMap()
-                hash_b = HashMap()
-                from_list(hash_a,a)
-                from_list(hash_b,b)
-                a_b =mconcat(hash_a, hash_b)  # {}
-                b_a =mconcat(hash_a, hash_b)  # {}
-                self.assertEqual(a_b, b_a)
+    # @given(a=st.lists(st.integers()), b=st.lists(st.integers()))
+    # def test_identity_element_property(self, a, b):
+    #             hash_a = HashMap()
+    #             hash_b = HashMap()
+    #             from_list(hash_a,a)
+    #             from_list(hash_b,b)
+    #             a_b =mconcat(hash_a, hash_b)  # {}
+    #             b_a =mconcat(hash_b, hash_a)  # {}
+    #             self.assertEqual(a_b, b_a)
     #
     #
     #
