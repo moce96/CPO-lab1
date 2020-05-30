@@ -1,0 +1,14 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="digraph.digraph1.graphviz" />
+          <option value="hashMap_test.hashMap_mutable.false" />
+          <option value="hashMap_test.hashMap_immutable.false" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

@@ -91,7 +91,6 @@ def from_list(self, list):
 
 
 # 5. ﬁnd element by speciﬁc predicate
-# 5. ﬁnd element by speciﬁc predicate
 def find_iseven(self):
     mylist = to_list(self)
     mylist1 = []

@@ -88,6 +88,16 @@ class TestImmutableList(unittest.TestCase):
         self.assertEqual(mempty([]), [])
         self.assertEqual(mempty([1, 2, 3, 4]), [])
 
+    def test_mconcat(self):
+        hash = HashMap()
+        hash1=HashMap()
+        mconcat(hash,hash1)
+        self.assertEqual(hash.to_list(), [])
+        add(hash1,1)
+        add(hash1,2)
+        mconcat(hash,hash1)
+        self.assertEqual(hash.to_list(), [1, 2])
+
 
     @given(st.lists(st.integers()))
     def test_from_list_to_list_equality(self, a):
@@ -121,16 +131,6 @@ class TestImmutableList(unittest.TestCase):
 
 
     # 10. iterator
-    # def test_iter(self):
-    #     arr = [1, 2, 3]
-    #     tmp = []
-    #     try:
-    #         get_next = iterator(arr)
-    #         while True:
-    #             tmp.append(get_next())
-    #     except StopIteration:
-    #         pass
-    #     self.assertEqual(arr, tmp)
     def test_iter(self):
         x = [1, 2, 3]
         hash=HashMap()
