@@ -33,20 +33,20 @@ class HashMap(object):
                         p = p.next
                     i += 1
 
-    def add(self, key, value):
-        hash_value = key % self.size
-
-        if self.data[hash_value].value == None:
-            self.data[hash_value].value = value
-            self.data[hash_value].key = key
-            self.keyset.append(key)
-        else:
-            temp = Node(key, value)
-            self.keyset.append(key)
-            p = self.data[hash_value]
-            while p.next != None:
-                p = p.next
-            p.next = temp
+    # def add(self, key, value):
+    #     hash_value = key % self.size
+    #
+    #     if self.data[hash_value].value == None:
+    #         self.data[hash_value].value = value
+    #         self.data[hash_value].key = key
+    #         self.keyset.append(key)
+    #     else:
+    #         temp = Node(key, value)
+    #         self.keyset.append(key)
+    #         p = self.data[hash_value]
+    #         while p.next != None:
+    #             p = p.next
+    #         p.next = temp
 
 
     # 1. add a new element
@@ -133,8 +133,7 @@ def to_list(self):
 
 def from_list(self, list):
     for k, v in enumerate(list):
-        self.add(k, v)
-    return self
+        add(self,k, v)
 
 
 def get(self, key: int) -> V:

@@ -126,7 +126,7 @@ class TestImmutableList(unittest.TestCase):
         hash = HashMap()
         from_list(hash, a)
         b = to_list(hash)
-        self.assertEqual(a.sort(), b.sort())
+        self.assertEqual(a, b)
 
     @given(st.lists(st.integers()))
     def test_python_len_and_list_size_equality(self, lst):
@@ -147,7 +147,7 @@ class TestImmutableList(unittest.TestCase):
     def test_from_list(self, a):
         hash = HashMap()
         from_list(hash,a)
-        self.assertEqual(to_list(hash).sort(), a.sort())
+        self.assertEqual(to_list(hash), a)
 
 
 
