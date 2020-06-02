@@ -11,43 +11,44 @@ class Node:
 
 
 class HashMap(object):
-#Initializes the hashmap, if there is a dictionary, through the dictionary
-    def __init__(self,dict=None):
+    # Initializes the hashmap, if there is a dictionary, through the dictionary
+    def __init__(self, dict=None):
         self.keyset = []
         self.data = [Node() for _ in range(13)]
         self.size = 13
-        #Initialization by dict
+        # Initialization by dict
         if dict is not None:
-            from_dict(self,dict)
+            from_dict(self, dict)
 
 
+# Convert list to hash map
+def from_dict(hash, dict):
+    for k, v in dict.items():
+        put(hash, k, v)
 
-#Convert list to hash map
-def from_dict(hash,dict):
-        for k,v in dict.items():
-            put(hash,k,v)
 
-#Convert this map to the dict {}
+# Convert this map to the dict {}
 def to_dict(hash) -> {}:
-   kvList={}
-   if hash is None:
-       return kvList
-   else:
-       i = 0
-       while i < 13:
-           if hash.data[i].value == None:
-               i += 1
-               continue
-           else:
-               p = hash.data[i]
-               while p != None:
-                   kvList[p.key]=p.value
-                   p = p.next
-               i += 1
-   return kvList
+    kvList = {}
+    if hash is None:
+        return kvList
+    else:
+        i = 0
+        while i < hash.size:
+            if hash.data[i].value == None:
+                i += 1
+                continue
+            else:
+                p = hash.data[i]
+                while p != None:
+                    kvList[p.key] = p.value
+                    p = p.next
+                i += 1
+    return kvList
+
 
 # 1. add a new element
-def put(hash, key:int, value:V) ->HashMap:
+def put(hash, key: int, value: V) -> HashMap:
     """
        Insert key-value pairs into hash map
 
@@ -56,8 +57,10 @@ def put(hash, key:int, value:V) ->HashMap:
        :param value: The content corresponding to the key value of the hash map to be inserted
        :return: Hash map obtained after inserting key-value pairs
        """
-    hash_key = key % 13
-    if hash.data[hash_key].value == None:
+    if hash == None:
+        hash = HashMap()
+    hash_key = key % hash.size
+    if hash.data[hash_key].key == None:
         hash.data[hash_key].value = value
         hash.data[hash_key].key = key
         hash.keyset.append(key)
@@ -71,53 +74,54 @@ def put(hash, key:int, value:V) ->HashMap:
 
     return hash
 
+
 # 2. remove an element
-def del_(hash, key) ->HashMap:
+def del_(hash, key) -> HashMap:
     """
     delete the map node in map where the key = key
     :param key: map value
     :return:  hashmap
     """
-    i = 0
-    while i < hash.size:
-        if hash.data[i].key == None:
-            i += 1
-            continue
-        else:
-            p = hash.data[i]
-            if p.key == key:
-                if p.next == None:
-                    p.key = None
-                    p.value = None
-                else:
-                    temp = p.next
-                    p.key = temp.key
-                    p.value = temp.value
-                    p.next = temp.next
-                remove_keyset(hash, key)
-                return hash
+    if hash == None:
+        return None;
+    hash_key = key % hash.size
+    if hash.data[hash_key].value == None:
+        raise Exception('No valid key value was found')
+    else:
+        p = hash.data[hash_key]
+        if key == p.key:
+            if p.next == None:
+                p.key = None
+                p.value = None
             else:
-                while p != None:
-                    if p.key == key:
-                        temp = p.next
-                        p.next = temp.next
-                        remove_keyset(hash, key)
-                        return hash
-                    else:
-                        p = p.next
-        i += 1
-    return hash
+                temp = p.next
+                p.key = temp.key
+                p.value = temp.value
+                p.next = temp.next
+            remove_keyset(hash, key)
+            return hash
+        else:
+            while p != None:
+                if p.key == key:
+                    temp = p.next
+                    p.next = temp.next
+                    remove_keyset(hash, key)
+                    return hash
+                else:
+                    p = p.next
+    raise Exception('No valid key value was found')
 
 
 def remove_keyset(hashmap, key):
     for i, k in enumerate(hashmap.keyset):
         if key == k:
-            arr=hashmap.keyset
+            arr = hashmap.keyset
             del arr[i]
             return hashmap
 
+
 # 3. size
-def getSize(hash) ->int:
+def getSize(hash) -> int:
     """
      Gets the number of values of the hashmap
     :param hash: hashmap
@@ -125,7 +129,7 @@ def getSize(hash) ->int:
     """
     sum = 0
     i = 0
-    while i < 13:
+    while i < hash.size:
         if hash.data[i].value == None:
             i += 1
             continue
@@ -145,8 +149,8 @@ def to_list(hash):
     :return: []
     """
     list = []
-    for i in hash.keyset:
-        list.append(get(hash, i))
+    for i, key in enumerate(hash.keyset):
+        list.append(get(hash, key))
     return list
 
 
@@ -171,7 +175,7 @@ def get(hash, key: int) -> V:
         if hash.keyset == None:
             return None
         i = 0
-        while i < 13:
+        while i < hash.size:
             if hash.data[i].key == None:
                 i += 1
                 continue
@@ -216,18 +220,29 @@ def filter_iseven(hash):
 
 
 # 7. map structure by speciﬁc function
-def a_map(hash, f) -> list:
+def map(hash, f) -> HashMap:
     """
      map structure by speciﬁc function
     :param f: the function to map
-    :return list
+    :return hashmap
     """
-    i = 0
-    list = to_list(hash)
-    for v in list:
-        list[i] = f(v)
-        i += 1
-    return list
+    table = cons(hash)
+    for key in hash.keyset:
+        value = get(hash, key)
+        value = f(value)
+        put(table, key, value)
+    return table
+
+
+def cons(map) -> HashMap:
+    """
+    Copy a hash map
+    :param map: HashMap
+    :return: The copied hash map
+    """
+    table = HashMap()
+    from_dict(table, to_dict(map))
+    return table
 
 
 # 8. reduce:process structure elements to build a return value by speciﬁc functions
@@ -240,18 +255,9 @@ def reduce(hash, f, initial_state):
     :return final state
     """
     state = initial_state
-    i = 0
-    while i < 13:
-        if hash.data[i].value == None:
-            i += 1
-            continue
-        else:
-            p = hash.data[i]
-            state = f(state, p.value)
-            while p.next != None:
-                p = p.next
-                state = f(state, p.value)
-        i += 1
+    for key in hash.keyset:
+        value = get(hash, key)
+        state = f(state, value)
     return state
 
 
@@ -262,7 +268,7 @@ def mempty(hash):
     :param hash:hashmap
     """
     i = 0
-    while i < 13:
+    while i < hash.size:
         if hash.data[i].value == None:
             i += 1
             continue
@@ -276,7 +282,6 @@ def mempty(hash):
     return hash
 
 
-
 def mconcat(a, b):
     """
    concat two maps to one
@@ -284,27 +289,51 @@ def mconcat(a, b):
    :param b:  hashmap
    :return: new hashmap
    """
-    hash = HashMap()
+    if a is None and b is None:
+        return None
     if a is None:
-        if b is None:
-            return None
-        else:
-            for k,v in enumerate(to_list(b)):
-                put(hash,k,v)
-            return hash
-    else:
-        if b is None:
-            for k, v in enumerate(to_list(a)):
-                put(hash, k, v)
-            return hash
-        else:
-            list_a = to_list(a)
-            list_b = to_list(b)
-            list_a.extend(list_b)
-            list_a.sort()
-            for k, v in enumerate(list_a):
-                put(hash, k, v)
-            return hash
+        return cons(b)
+    if b is None:
+        return cons(a)
+
+    table1 = cons(a)
+    table2 = cons(b)
+
+    if table2 is not None:
+        for i, key in enumerate(table2.keyset):
+            if (get(table1, key) != None):
+                value1 = get(table1, key)
+                value2 = get(table2, key)
+                if (value1 < value2):
+                    put(table1, key, value1)
+                else:
+                    put(table1, key, value2)
+            else:
+                value = table2.get(key)
+                table1.put(key, value)
+    return table1
+
+    # hash = HashMap()
+    # if a is None:
+    #     if b is None:
+    #         return None
+    #     else:
+    #         for k, v in enumerate(to_list(b)):
+    #             put(hash, k, v)
+    #         return hash
+    # else:
+    #     if b is None:
+    #         for k, v in enumerate(to_list(a)):
+    #             put(hash, k, v)
+    #         return hash
+    #     else:
+    #         list_a = to_list(a)
+    #         list_b = to_list(b)
+    #         list_a.extend(list_b)
+    #         list_a.sort()
+    #         for k, v in enumerate(list_a):
+    #             put(hash, k, v)
+    #         return hash
 
 
 # 10. iterator
