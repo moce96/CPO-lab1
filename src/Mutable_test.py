@@ -2,7 +2,7 @@ import unittest
 from hypothesis import given
 import hypothesis.strategies as st
 
-from src.reWrite.Mutable import *
+from src.hashMap_mutable import *
 
 
 class TestMutableList(unittest.TestCase):
@@ -12,7 +12,6 @@ class TestMutableList(unittest.TestCase):
         self.assertEqual(hash.get_hash(5), 5)
         self.assertEqual(hash.get_hash(24), 11)
 
-    # 1. add a new element
     def test_add(self):
         hash = HashMap()
         hash.add(2, 6)
@@ -23,7 +22,6 @@ class TestMutableList(unittest.TestCase):
         hash.add(1, 5)  # add another 5 with different key
         self.assertEqual(hash.get(1), 5)
 
-    # 2. remove an element
     def test_remove(self):
         hash = HashMap()
         dict1 = {1: 1, 3: 3, 5: 7}
@@ -67,7 +65,6 @@ class TestMutableList(unittest.TestCase):
         hash.to_dict()
         self.assertEqual(hash.to_dict(), {1: 2, 3: 2, 5: 1, 2: 3})
 
-    # 3. size
     def test_get_size(self):
         hash = HashMap()
         self.assertEqual(hash.get_size(), 0)
@@ -78,11 +75,6 @@ class TestMutableList(unittest.TestCase):
         hash.add(1, 3)
         self.assertEqual(hash.get_size(), 2)  # same key ,new value alter the old one
 
-    def test_from_list(self):
-        hash = HashMap()
-        hash.from_list([1, 2, 3, 4, 5, 1])
-        self.assertEqual(hash.get_size(), 6)
-        self.assertEqual(hash.to_dict(), {1: 1, 2: 2, 3: 3, 4: 4, 5: 5, 6: 1})
 
     def test_to_list(self):
         hash = HashMap()
