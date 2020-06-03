@@ -170,12 +170,11 @@ def to_list(hash):
     :return: []
     """
     list = []
-    if len(hash.keyset)==0:
+    if hash is None:
         return list
-    else:
-        for i, key in enumerate(hash.keyset):
-            list.append(get(hash, key))
-        return list
+    for i, key in enumerate(hash.keyset):
+        list.append(get(hash, key))
+    return list
 
 
 def from_list(hash, list):
@@ -291,19 +290,7 @@ def mempty(hash):
     clear the hashmap
     :param hash:hashmap
     """
-    i = 0
-    while i < hash.size:
-        if hash.data[i].value == None:
-            i += 1
-            continue
-        else:
-            p = hash.data[i]
-            p.key = None
-            p.value = None
-            p.next = None
-        i += 1
-    hash.keyset = []
-    return hash
+    return None
 
 def Merge(dict1, dict2):
     res = {**dict1, **dict2}
@@ -316,27 +303,39 @@ def mconcat(a, b):
    :param b:  hashmap
    :return: new hashmap
    """
-    hash = HashMap()
     if a is None:
-        if b is None:
-            return None
-        else:
-            for k, v in enumerate(to_list(b)):
-                put(hash, k, v)
-            return hash
-    else:
-        if b is None:
-            for k, v in enumerate(to_list(a)):
-                put(hash, k, v)
-            return hash
-        else:
-            list_a = to_list(a)
-            list_b = to_list(b)
-            list_a.extend(list_b)
-            list_a.sort()
-            for k, v in enumerate(list_a):
-                put(hash, k, v)
-            return hash
+        return b
+    if b is None:
+        return a
+    for key in b.keyset:
+        value=get(b,key)
+        put(a,key,value)
+    return a
+
+
+
+    # hash = HashMap()
+
+    # if a is None:
+    #     if b is None:
+    #         return None
+    #     else:
+    #         for k, v in enumerate(to_list(b)):
+    #             put(hash, k, v)
+    #         return hash
+    # else:
+    #     if b is None:
+    #         for k, v in enumerate(to_list(a)):
+    #             put(hash, k, v)
+    #         return hash
+    #     else:
+    #         list_a = to_list(a)
+    #         list_b = to_list(b)
+    #         list_a.extend(list_b)
+    #         list_a.sort()
+    #         for k, v in enumerate(list_a):
+    #             put(hash, k, v)
+    #         return hash
 
 
 # 10. iterator

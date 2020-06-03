@@ -71,8 +71,8 @@ class TestImmutableList(unittest.TestCase):
 
     def test_mconcat(self):
         self.assertEqual(mconcat(None, None), None)
-        self.assertEqual(to_dict(mconcat(put(HashMap(), 1, 2), None)), to_dict(put(HashMap(), 0, 2)))
-        self.assertEqual(to_dict(mconcat(None, put(HashMap(), 1, 2))), to_dict(put(HashMap(), 0, 2)))
+        self.assertEqual(to_dict(mconcat(put(HashMap(), 1, 2), None)), to_dict(put(HashMap(), 1, 2)))
+        self.assertEqual(to_dict(mconcat(None, put(HashMap(), 1, 2))), to_dict(put(HashMap(), 1, 2)))
 
     @given(a=st.lists(st.integers()), b=st.lists(st.integers()), key=st.integers(), value=st.integers())
     def test_immutable(self, a, b, key, value):
@@ -149,6 +149,19 @@ class TestImmutableList(unittest.TestCase):
         a = put(hash, key, value)
         self.assertEqual(get(hash, key), value)
 
+    @given(a=st.lists(st.integers()), b=st.lists(st.integers()))
+    def test_monoid_identity(self, a, b):
+        hash = HashMap()
+        hash_a = HashMap()
+        from_list(hash_a,a)
+        a_b=mconcat(mempty(hash),hash_a)  # {}
+        b_a=mconcat(hash_a,mempty(hash))  # {}
+        self.assertEqual(a_b, hash_a)
+        self.assertEqual(a_b, b_a)
+
+
+
+
     @given(a=st.lists(st.integers()), b=st.lists(st.integers()), c=st.lists(st.integers()))
     def test_monoid_associativity(self, a, b, c):
         hash_a = HashMap()
@@ -158,20 +171,10 @@ class TestImmutableList(unittest.TestCase):
         from_list(hash_b, b)
         from_list(hash_c, c)
         a_b = mconcat(hash_a, hash_b)
-        b_a = mconcat(hash_b, hash_a)
-        a_b_list=to_list(a_b)
-        b_a_list=to_list(b_a)
-        self.assertEqual(a_b_list, b_a_list)
-        c_b = mconcat(hash_c, hash_b)
         b_c = mconcat(hash_b, hash_c)
-        self.assertEqual(to_list(c_b), to_list(b_c))
-        a_b__c = mconcat(hash_c, a_b)
-        a__b_c = mconcat(hash_a, b_c)
-        self.assertEqual(to_list(a_b__c), to_list(a__b_c))
-        self.assertEqual(to_dict(mconcat(put_list(HashMap(), a), None)), to_dict(put_list(HashMap(), a)))
-        self.assertEqual(mconcat(None, None), None)
-        self.assertEqual(mconcat(None, hash_a).keyset, hash_a.keyset)
-        self.assertEqual(to_list(mconcat(hash_a, None)), to_list(hash_a))
+        a_b__c=mconcat( a_b,hash_c)
+        a__b_c=mconcat(hash_a,b_c)
+        self.assertEqual(a_b__c, a__b_c)
 
     # 10. iterator
     def test_iter(self):
