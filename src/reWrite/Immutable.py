@@ -1,6 +1,6 @@
 from typing import TypeVar
 
-V = TypeVar(str, int, float)
+V = TypeVar(str, int, float,object)
 
 
 class Node:
@@ -73,6 +73,27 @@ def put(hash, key: int, value: V) -> HashMap:
         p.next = temp
 
     return hash
+
+def put_list(hash,list):
+    if hash == None:
+        hash = HashMap()
+    for key,value in enumerate(list):
+        hash_key = key % hash.size
+        if hash.data[hash_key].key == None:
+            hash.data[hash_key].value = value
+            hash.data[hash_key].key = key
+            hash.keyset.append(key)
+        else:
+            temp = Node(key, value)
+            hash.keyset.append(key)
+            p = hash.data[hash_key]
+            while p.next != None:
+                p = p.next
+            p.next = temp
+
+    return hash
+
+
 
 
 # 2. remove an element
@@ -149,9 +170,12 @@ def to_list(hash):
     :return: []
     """
     list = []
-    for i, key in enumerate(hash.keyset):
-        list.append(get(hash, key))
-    return list
+    if len(hash.keyset)==0:
+        return list
+    else:
+        for i, key in enumerate(hash.keyset):
+            list.append(get(hash, key))
+        return list
 
 
 def from_list(hash, list):
@@ -281,6 +305,9 @@ def mempty(hash):
     hash.keyset = []
     return hash
 
+def Merge(dict1, dict2):
+    res = {**dict1, **dict2}
+    return res
 
 def mconcat(a, b):
     """
@@ -289,51 +316,27 @@ def mconcat(a, b):
    :param b:  hashmap
    :return: new hashmap
    """
-    if a is None and b is None:
-        return None
+    hash = HashMap()
     if a is None:
-        return cons(b)
-    if b is None:
-        return cons(a)
-
-    table1 = cons(a)
-    table2 = cons(b)
-
-    if table2 is not None:
-        for i, key in enumerate(table2.keyset):
-            if (get(table1, key) != None):
-                value1 = get(table1, key)
-                value2 = get(table2, key)
-                if (value1 < value2):
-                    put(table1, key, value1)
-                else:
-                    put(table1, key, value2)
-            else:
-                value = table2.get(key)
-                table1.put(key, value)
-    return table1
-
-    # hash = HashMap()
-    # if a is None:
-    #     if b is None:
-    #         return None
-    #     else:
-    #         for k, v in enumerate(to_list(b)):
-    #             put(hash, k, v)
-    #         return hash
-    # else:
-    #     if b is None:
-    #         for k, v in enumerate(to_list(a)):
-    #             put(hash, k, v)
-    #         return hash
-    #     else:
-    #         list_a = to_list(a)
-    #         list_b = to_list(b)
-    #         list_a.extend(list_b)
-    #         list_a.sort()
-    #         for k, v in enumerate(list_a):
-    #             put(hash, k, v)
-    #         return hash
+        if b is None:
+            return None
+        else:
+            for k, v in enumerate(to_list(b)):
+                put(hash, k, v)
+            return hash
+    else:
+        if b is None:
+            for k, v in enumerate(to_list(a)):
+                put(hash, k, v)
+            return hash
+        else:
+            list_a = to_list(a)
+            list_b = to_list(b)
+            list_a.extend(list_b)
+            list_a.sort()
+            for k, v in enumerate(list_a):
+                put(hash, k, v)
+            return hash
 
 
 # 10. iterator
