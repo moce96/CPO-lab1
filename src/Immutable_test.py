@@ -92,7 +92,7 @@ class TestImmutableList(unittest.TestCase):
         table4_temp = table4
         table5 = mconcat(table3, table4)
         table6 = mconcat(table4, table3)
-        # self.assertNotEqual(id(table5), id(table6))
+        self.assertEqual(id(table5), id(table6))
         self.assertEqual(to_dict(table3_temp), to_dict(table3))
         self.assertEqual(to_dict(table4_temp), to_dict(table4))
 

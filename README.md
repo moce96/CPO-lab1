@@ -40,6 +40,7 @@ In the hash_mutabable module, I defined a class HashMap and used chained address
 
 
 ## Partial code introduction
+### 一.mutable
 
 #### 1. Initialize hash map
 
@@ -530,3 +531,193 @@ def test_iter(self):
     i = iter(HashMap())
     self.assertRaises(StopIteration, lambda: next(i))
 ```
+### 二. immtable
+1. add a new element
+
+        def put(hash, key: int, value: V) -> HashMap:  
+         if hash == None:  
+            hash = HashMap()  
+        hash_key = key % hash.size  
+        if hash.data[hash_key].key == None:  
+            hash.data[hash_key].value = value  
+            hash.data[hash_key].key = key  
+            hash.keyset.append(key)  
+        else:  
+            temp = Node(key, value)  
+            hash.keyset.append(key)  
+            p = hash.data[hash_key]  
+            while p.next != None:  
+                p = p.next  
+            p.next = temp  
+      
+        return hash
+2. remove an element
+
+        def del_(hash, key) -> HashMap:  
+        if hash == None:  
+            return None;  
+        hash_key = key % hash.size  
+        if hash.data[hash_key].value == None:  
+            raise Exception('No valid key value was found')  
+        else:  
+            p = hash.data[hash_key]  
+            if key == p.key:  
+                if p.next == None:  
+                    p.key = None  
+				     p.value = None  
+		        else:  
+                    temp = p.next  
+                    p.key = temp.key  
+                    p.value = temp.value  
+                    p.next = temp.next  
+                remove_keyset(hash, key)  
+                return hash  
+            else:  
+                while p != None:  
+                    if p.key == key:  
+                        temp = p.next  
+                        p.next = temp.next  
+                        remove_keyset(hash, key)  
+                        return hash  
+                    else:  
+                        p = p.next  
+        raise Exception('No valid key value was found')  
+        
+        def remove_keyset(hashmap, key):  
+		    for i, k in enumerate(hashmap.keyset):  
+			        if key == k:  
+			            arr = hashmap.keyset  
+			            del arr[i]  
+			            return hashmap
+			            
+			      
+3.size
+
+    def getSize(hash) -> int:  
+	  sum = 0  
+	  i = 0  
+	  while i < hash.size:  
+	        if hash.data[i].value == None:  
+	            i += 1  
+				continue  
+			else:  
+	            p = hash.data[i]  
+	            while p != None:  
+	                sum += 1  
+				    p = p.next  
+	            i += 1  
+	  return sum
+#### 4. conversion from and to python lists
+
+    def to_list(hash):  
+     list = []  
+    if hash is None:  
+        return list  
+    for i, key in enumerate(hash.keyset):  
+        list.append(get(hash, key))  
+    return list  
+  
+  
+	def from_list(hash, list):  
+	    for k, v in enumerate(list):  
+	        put(hash, k, v)  
+	  
+	  
+	def get(hash, key: int) -> V:  
+	    hash_value = key % hash.size  
+	    while True:  
+	        if hash.keyset == None:  
+	            return None  
+	  i = 0  
+	  while i < hash.size:  
+	            if hash.data[i].key == None:  
+	                i += 1  
+	  continue  
+	 else:  
+	                p = hash.data[i]  
+	                while p != None:  
+	                    if p.key == key:  
+	                        return p.value  
+	                    p = p.next  
+	                i += 1  
+	  return None
+  
+#### 5. ﬁnd element by speciﬁc predicate
+
+    def find_iseven(hash) -> HashMap:  
+	 mylist = to_list(hash)  
+	    mylist1 = []  
+	    for k in range(len(mylist)):  
+	        if mylist[k] % 2 == 0:  
+	            mylist1.append(mylist[k])  
+	    return mylist1
+
+#### 6. ﬁlter data structure by speciﬁc predicate
+
+    def filter_iseven(hash):  
+    mylist = to_list(hash)  
+    mylist1 = []  
+    for k in range(len(mylist)):  
+        if mylist[k] % 2 != 0:  
+            mylist1.append(mylist[k])  
+    return mylist1
+
+#### 7. map structure by speciﬁc function
+
+    def map(hash, f) -> HashMap:  
+    table = cons(hash)  
+    for key in hash.keyset:  
+        value = get(hash, key)  
+        value = f(value)  
+        put(table, key, value)  
+    return table
+
+#### 8. reduce:process structure elements to build a return value by speciﬁc functions
+
+    def reduce(hash, f, initial_state):  
+    state = initial_state  
+    for key in hash.keyset:  
+        value = get(hash, key)  
+        state = f(state, value)  
+    return state
+
+#### 9.  mempty and mconcat
+
+    def mempty(hash):  
+	   return None  
+	  
+	def Merge(dict1, dict2):  
+	    res = {**dict1, **dict2}  
+	    return res  
+	  
+	def mconcat(a, b):  
+	    if a is None:  
+	        return b  
+	    if b is None:  
+	        return a  
+	    for key in b.keyset:  
+	        value=get(b,key)  
+	        put(a,key,value)  
+	    return a
+
+#### 10. iterator 
+
+    def iterator(hash):  
+     if hash is not None:  
+        res = []  
+        list = to_list(hash)  
+        for i in list:  
+            res.append(i)  
+        a = iter(res)  
+    else:  
+        a = None  
+  
+	 def get_next():  
+	        if a is None:  
+	            return False  
+			else:  
+	            return next(a)  
+	    return get_next
+
+
+

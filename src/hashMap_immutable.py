@@ -313,31 +313,6 @@ def mconcat(a, b):
     return a
 
 
-
-    # hash = HashMap()
-
-    # if a is None:
-    #     if b is None:
-    #         return None
-    #     else:
-    #         for k, v in enumerate(to_list(b)):
-    #             put(hash, k, v)
-    #         return hash
-    # else:
-    #     if b is None:
-    #         for k, v in enumerate(to_list(a)):
-    #             put(hash, k, v)
-    #         return hash
-    #     else:
-    #         list_a = to_list(a)
-    #         list_b = to_list(b)
-    #         list_a.extend(list_b)
-    #         list_a.sort()
-    #         for k, v in enumerate(list_a):
-    #             put(hash, k, v)
-    #         return hash
-
-
 # 10. iterator
 def iterator(hash):
     """
